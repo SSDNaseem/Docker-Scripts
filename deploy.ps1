@@ -56,7 +56,7 @@ Start-Sleep -s 10
 if ($state.lastSuccessfulCommand -le "create database") {
     $sqlFile = "create_table.sql"
     Set-Content -Path $sqlFile -Value "CREATE DATABASE $($state.database);"
-    sqlcmd -S (LocalDB)\MSSQLLocalDb -U naseem -P 123 -Q "CREATE DATABASE sampleDb"
+    sqlcmd -S (LocalDB)\MSSQLLocalDb -U $state.data.name -P 123 -Q "CREATE DATABASE $state.database"
     # docker cp $sqlFile mycontainer:/create-database.sql
     # docker exec mycontainer /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password123 -i /create-database.sql
     Remove-Item $sqlFile
@@ -69,7 +69,7 @@ if ($state.lastSuccessfulCommand -le "create database") {
 
 # Create a table
 if ($state.lastSuccessfulCommand -le "create table") {
-    sqlcmd -S (LocalDB)\MSSQLLocalDb -U naseem -P 123 -d sampleDb -i create_table.sql
+    sqlcmd -S (LocalDB)\MSSQLLocalDb -U $state.data.name  -P 123 -d sampleDb -i create_table.sql
 
     # docker exec mycontainer /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password123 -d $($state.database) -Q "CREATE TABLE $($state.table) (Id INT, Name VARCHAR(50))"
     if ($LASTEXITCODE -ne 0) {
@@ -81,7 +81,7 @@ if ($state.lastSuccessfulCommand -le "create table") {
 
 # Insert data into the table
 if ($state.lastSuccessfulCommand -le "insert data") {
-    sqlcmd -S (LocalDB)\MSSQLLocalDb -U naseem -P 123 -d sampleDb -i insert_data.sql
+    sqlcmd -S (LocalDB)\MSSQLLocalDb -U $state.data.name  -P 123 -d sampleDb -i insert_data.sql
 
     # foreach ($row in $state.data) {
     #     $id = $row.id
@@ -93,7 +93,7 @@ if ($state.lastSuccessfulCommand -le "insert data") {
         }
     }
     $state.lastSuccessfulCommand = "insert data"
-}
+
 
 # Save the state to a file
 $state | ConvertTo-
