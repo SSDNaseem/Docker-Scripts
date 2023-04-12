@@ -1,0 +1,12 @@
+{
+    "lastSuccessfulCommand": "build",
+    "lastSuccessfulQuery": "SELECT * FROM MyTable",
+    "state": {
+        "database": "MyDatabase",
+        "table": "MyTable",
+        "data": [
+            { "id": 1, "name": "John" },
+            { "id": 2, "name": "Jane" }
+        ]
+    }
+}
